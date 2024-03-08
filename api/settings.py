@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CORS_ALLOWED_ORIGINS = [
-    "http://opmsurvey.pythonanywhere.com",
+    "https://opmsurvey.pythonanywhere.com"
 ]
 
 
