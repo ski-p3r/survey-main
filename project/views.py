@@ -69,7 +69,7 @@ class ResultByKnowledgeAreaView(APIView):
                     stage_name = stage_data['process_group']
                     print(count_stage)
                     print(stage_data['average'] )
-                    
+
                     if count_stage > 0:
                         avg = stage_data['average']
                     else:
@@ -96,13 +96,13 @@ class ResultByKnowledgeAreaView(APIView):
             response_data = []
             for stage_data in stage_averages:
                 stage_name = stage_data['stage']
-                avg = stage_data['average'] 
+                avg = stage_data['average']
                 print(count_stage)
                 average_result = round(avg, 2)
                 response_data.append({'subject': stage_name, 'A': average_result})
 
             return Response(response_data)
-        
+
         elif oe:
             response_data = []
             for i in excluded_stages:
@@ -122,7 +122,7 @@ class ResultByKnowledgeAreaView(APIView):
                     stage_name = stage_data['stage']
                     print(count_stage)
                     print(stage_data['average'] )
-                    
+
                     if count_stage > 0:
                         avg = stage_data['average']
                     else:
@@ -368,7 +368,7 @@ def calculate_oe_domain_averages(request):
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all()
+    queryset = Company.objects.all().filter(private=False)
     serializer_class = CompanySerializer
 
     def get_serializer_class(self):

@@ -30,7 +30,6 @@ class EmployeeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class EmployeeGetSerializer(serializers.ModelSerializer):
-    company = CompanyNameSerializer()
     user=UserSerializer()
     class Meta:
         model = Employee

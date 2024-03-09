@@ -8,6 +8,7 @@ class Company(models.Model):
     fax = models.CharField(max_length=50)
     website = models.URLField()
     no_of_employee = models.IntegerField()
+    private = models.BooleanField(default=False, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
