@@ -33,9 +33,11 @@ class ResultByKnowledgeAreaView(APIView):
         stage = request.query_params.get('stage')
         oe = request.query_params.get('oe')
         process_group = request.query_params.get('process_group')
-        excluded_stages = ['cultural', 'humanresources', 'structural', 'technological']
+        excluded_stages = ['cultural', 'humanresources',
+                           'structural', 'technological']
         included = ["standardize", "measure", "control", "improve"]
-        pg= ["Initiating", "Planning", "Integration Management", "Executing", "Monitoring and Controlling", "Closing"]
+        pg = ["Initiating", "Planning", "Integration Management",
+              "Executing", "Monitoring and Controlling", "Closing"]
 
         queryset = Result.objects.all()
 
@@ -68,7 +70,7 @@ class ResultByKnowledgeAreaView(APIView):
                 for stage_data in stage_averages:
                     stage_name = stage_data['process_group']
                     print(count_stage)
-                    print(stage_data['average'] )
+                    print(stage_data['average'])
 
                     if count_stage > 0:
                         avg = stage_data['average']
@@ -76,7 +78,8 @@ class ResultByKnowledgeAreaView(APIView):
                         avg = stage_data['average'] / 1
                     print(count_stage)
                     average_result = round(avg, 2)
-                    response_data.append({'subject': stage_name, 'A': average_result})
+                    response_data.append(
+                        {'subject': stage_name, 'A': average_result})
 
             return Response(response_data)
 
@@ -99,7 +102,8 @@ class ResultByKnowledgeAreaView(APIView):
                 avg = stage_data['average']
                 print(count_stage)
                 average_result = round(avg, 2)
-                response_data.append({'subject': stage_name, 'A': average_result})
+                response_data.append(
+                    {'subject': stage_name, 'A': average_result})
 
             return Response(response_data)
 
@@ -121,7 +125,7 @@ class ResultByKnowledgeAreaView(APIView):
                 for stage_data in stage_averages:
                     stage_name = stage_data['stage']
                     print(count_stage)
-                    print(stage_data['average'] )
+                    print(stage_data['average'])
 
                     if count_stage > 0:
                         avg = stage_data['average']
@@ -129,7 +133,8 @@ class ResultByKnowledgeAreaView(APIView):
                         avg = stage_data['average'] / 1
                     print(count_stage)
                     average_result = round(avg, 2)
-                    response_data.append({'subject': stage_name, 'A': average_result})
+                    response_data.append(
+                        {'subject': stage_name, 'A': average_result})
 
             return Response(response_data)
         else:
@@ -155,12 +160,14 @@ class ResultByKnowledgeAreaView(APIView):
                         avg = stage_data['average'] / 1
                     print(count_stage)
                     average_result = round(avg, 2)
-                    response_data.append({'subject': stage_name, 'A': average_result})
+                    response_data.append(
+                        {'subject': stage_name, 'A': average_result})
 
             return Response(response_data)
 
         # Initialize a dictionary to store results and totals grouped by knowledge areas
-        results_by_knowledge_area = defaultdict(lambda: {'total_result': 0, 'total_number': 0})
+        results_by_knowledge_area = defaultdict(
+            lambda: {'total_result': 0, 'total_number': 0})
 
         # Iterate through each result in the queryset
         for result in queryset:
@@ -178,7 +185,8 @@ class ResultByKnowledgeAreaView(APIView):
             total_number = values['total_number']
             average_result = total_result / total_number if total_number != 0 else 0
             # Round the average result to two decimal points
-            results_by_knowledge_area[knowledge_area]['average_result'] = round(average_result, 2)
+            results_by_knowledge_area[knowledge_area]['average_result'] = round(
+                average_result, 2)
 
         # Serialize the data
         serialized_data = []
@@ -190,7 +198,6 @@ class ResultByKnowledgeAreaView(APIView):
             serialized_data.append(data)
 
         return Response(serialized_data)
-
 
 
 @api_view(['GET'])
@@ -224,6 +231,7 @@ def calculate_all_domain_averages_percent(request):
     else:
         return JsonResponse({'error': 'Please provide company_id and employee_id parameters'})
 
+
 class CalculateAllDomainAverages(APIView):
     def get(self, request):
         company_id = request.query_params.get('company_id')
@@ -246,11 +254,13 @@ class CalculateAllDomainAverages(APIView):
                     average = result / total_number
                 else:
                     average = 0
-                domain_averages[domain] = {'total_number': total_number, 'result': result, 'average': round(average, 2)}
+                domain_averages[domain] = {
+                    'total_number': total_number, 'result': result, 'average': round(average, 2)}
 
             return Response(domain_averages)
         else:
             return Response({'error': 'Please provide company_id and employee_id parameters'})
+
 
 @api_view(['POST'])
 def user_detail(request):
@@ -265,19 +275,21 @@ def user_detail(request):
                     employee = Employee.objects.get(user=user)
                     company = employee.company
                     company_serializer = CompanyNameSerializer(company)
-                    return Response({'company': company_serializer.data, "employee": employee.id, "is_admin": is_admin, "survey": user.survey}, status=status.HTTP_200_OK)
+                    return Response({'company': company_serializer.data, "employee": employee.id, "is_admin": is_admin, "survey": user.survey, "oe": user.oe}, status=status.HTTP_200_OK)
                 except Employee.DoesNotExist:
                     # Return a 404 response if employee record not found
                     return Response({'error': 'Employee record not found'}, status=status.HTTP_404_NOT_FOUND)
             else:
                 try:
                     company = Company.objects.get(user=user)
-                    company_serializer = CompanySerializer(company)  # Serialize the Company object
+                    company_serializer = CompanySerializer(
+                        company)  # Serialize the Company object
                     return Response({'company': company_serializer.data,  "is_admin": is_admin}, status=status.HTTP_200_OK)
                 except Company.DoesNotExist:
                     return Response({'error': 'Company record not found'}, status=status.HTTP_404_NOT_FOUND)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['POST'])
 def survey_status(request):
@@ -291,6 +303,20 @@ def survey_status(request):
         user.save()
         return Response({"message": "Submitted successfully!"}, status=status.HTTP_200_OK)
 
+
+@api_view(['POST'])
+def oe_status(request):
+    if request.method == 'POST':
+        data = request.data
+        id = data.get('id')
+        oe = "taken"
+
+        user = User.objects.get(id=id)
+        user.oe = oe
+        user.save()
+        return Response({"message": "Submitted successfully!"}, status=status.HTTP_200_OK)
+
+
 @api_view(['GET'])
 def calculate_domain_averages(request):
     company_id = request.GET.get('company_id')
@@ -298,7 +324,8 @@ def calculate_domain_averages(request):
 
     if company_id and employee_id:
         # Define process groups excluding "oe"
-        process_groups = ['initiating', 'planning', 'executing', 'm&c', 'closing']
+        process_groups = ['initiating', 'planning',
+                          'executing', 'm&c', 'closing']
 
         results = (
             Result.objects
@@ -323,7 +350,8 @@ def calculate_domain_averages(request):
         # Fill in missing process groups with zero averages
         for process_group in process_groups:
             if process_group not in domain_averages:
-                domain_averages[process_group] = {'process_group': process_group, 'average': 0}
+                domain_averages[process_group] = {
+                    'process_group': process_group, 'average': 0}
 
         return JsonResponse(domain_averages)
     else:
@@ -381,12 +409,14 @@ class CompanyViewSet(viewsets.ModelViewSet):
             return [AllowAny()]
         return super().get_permissions()
 
+
 class EmployeeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Employee.objects.all()
         company_id = self.request.query_params.get('company_id')
         if company_id:
-            queryset = queryset.filter(company_id=company_id, user__survey="taken")
+            queryset = queryset.filter(
+                company_id=company_id, user__survey="taken")
         return queryset
 
     def get_serializer_class(self):
@@ -394,9 +424,11 @@ class EmployeeViewSet(viewsets.ModelViewSet):
             return EmployeeSerializer
         return EmployeeGetSerializer
 
+
 class KnowledgeAreaViewSet(viewsets.ModelViewSet):
     queryset = KnowledgeArea.objects.all()
     serializer_class = KnowladgeSerializer
+
 
 class QuestionViewSet(viewsets.ModelViewSet):
 
@@ -427,7 +459,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
 class ResultViewSet(viewsets.ModelViewSet):
     queryset = Result.objects.filter(domain="oe")
-    serializer_class = ResultsSerializer  # Make sure this serializer matches the queryset fields
+    # Make sure this serializer matches the queryset fields
+    serializer_class = ResultsSerializer
 
     def get_serializer_class(self):
         if self.action == 'create':

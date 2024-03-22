@@ -40,7 +40,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=20)
     address = models.CharField(max_length=255)
     user_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
-    survey = models.CharField(max_length=20, choices=SURVEY_CHOICES, default="not")
+    survey = models.CharField(
+        max_length=20, choices=SURVEY_CHOICES, default="not")
+    oe = models.CharField(max_length=20, choices=SURVEY_CHOICES, default="not")
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
