@@ -275,7 +275,7 @@ def user_detail(request):
                     employee = Employee.objects.get(user=user)
                     company = employee.company
                     company_serializer = CompanyNameSerializer(company)
-                    return Response({'company': company_serializer.data, "employee": employee.id, "is_admin": is_admin, "survey": user.survey, "oe": user.oe}, status=status.HTTP_200_OK)
+                    return Response({'company': company_serializer.data, "employee": employee.id, "is_admin": is_admin, "survey": user.survey, "oe": user.oe_survey}, status=status.HTTP_200_OK)
                 except Employee.DoesNotExist:
                     # Return a 404 response if employee record not found
                     return Response({'error': 'Employee record not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -312,7 +312,7 @@ def oe_status(request):
         oe = "taken"
 
         user = User.objects.get(id=id)
-        user.oe = oe
+        user.oe_survey = oe
         user.save()
         return Response({"message": "Submitted successfully!"}, status=status.HTTP_200_OK)
 
