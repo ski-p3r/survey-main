@@ -59,19 +59,19 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-CORS_ALLOWED_ORIGINS = [
-    # Added here
-    "https://opm3.pythonanywhere.com/",
-    "http://opm3.pythonanywhere.com/",
-    # "https://opmsurvey.pythonanywhere.com",
-    # "http://opmsurvey.pythonanywhere.com",
-    # "http://127.0.0.1:8000",
-    # "http://localhost:8000",
-    # "http://127.0.0.1:5173",
-    # "http://localhost:5173",
-    # "https://esraelsurvey.pythonanywhere.com",
-]
-
+# CORS_ALLOWED_ORIGINS = [
+#     # Added here
+#     "https://opm3.pythonanywhere.com/",
+#     "http://opm3.pythonanywhere.com/",
+#     # "https://opmsurvey.pythonanywhere.com",
+#     # "http://opmsurvey.pythonanywhere.com",
+#     # "http://127.0.0.1:8000",
+#     # "http://localhost:8000",
+#     # "http://127.0.0.1:5173",
+#     # "http://localhost:5173",
+#     # "https://esraelsurvey.pythonanywhere.com",
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'api.urls'
 
