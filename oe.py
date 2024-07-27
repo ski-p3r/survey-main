@@ -305,3 +305,4 @@ for item in combined:
     )
 
 print(f'Inserted {len(combined)} records into the database.')
+print("Done")
