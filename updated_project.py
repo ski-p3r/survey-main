@@ -1,13 +1,4 @@
-import os
-import django
-
-# Set up Django environment
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
-django.setup()
-
-from project.models import Question, KnowledgeArea
-
-ls = {
+{
     42:{
         "name":[
             "What progress has been made in developing the standardized project charter in your construction project?",
@@ -446,62 +437,3 @@ ls = {
         ]
     }
 }
-
-combined = []
-knowledge_areas = [42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58]
-
-for knowledge_area in knowledge_areas:
-    dsl = ["standardize", "measure", "control", "improve"]
-    # Check if the knowledge area exists in the ls dictionary
-    if knowledge_area in ls:
-        names = ls[knowledge_area]["name"]
-        descriptions = ls[knowledge_area]["description"]
-        process_groups = ls[knowledge_area]["process_group"] if "process_group" in ls[knowledge_area] else [""] * len(names)
-
-        max_length = max(len(names), len(descriptions), len(process_groups))
-
-        # Generate combinations
-        for i in range(max_length):
-            name = names[i % len(names)] if names else ""
-            description = descriptions[i % len(descriptions)] if descriptions else ""
-            process_group = process_groups[i % len(process_groups)] if process_groups else ""
-            knowledge_area_instance = KnowledgeArea.objects.get(pk=knowledge_area)
-
-            for stage in dsl:
-                combined.append({
-                    "name": name,
-                    "description": description,
-                    "domain": "project",
-                    "stage": stage,
-                    "knowledge_area": knowledge_area,
-                    "process_group": process_group
-                })
-                Question.objects.create(
-                    name=name,
-                    description= description,
-                    domain= "project",
-                    stage= stage,
-                    knowledge_area= knowledge_area_instance,
-                    process_group= process_group
-                )
-                
-    else:
-        print(f"No data found for '{knowledge_area}' knowledge area.")
-
-print(len(combined))  # This should print 196
-
-
-# for key, value in ls.items():
-#     dsl = ["standardize", "measure", "control", "improve"]
-#     # Iterate over each question and description in the current key-value pair
-#     for j in range(len(value["name"])):
-#         # For each question and description, create a dictionary with different stages and append it to the combined list
-#         for i in dsl:
-#             knowledge_area_instance = KnowledgeArea.objects.get(pk=key)
-#             Question.objects.create(
-#                 name=value["name"][j],
-#                 description=value["description"][j],
-#                 knowledge_area=knowledge_area_instance,
-#                 domain="portfolio",
-#                 stage=i,
-#             )
